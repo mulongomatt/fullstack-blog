@@ -1,32 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const Post = require('../models/post');
+const Post = require('../models/Post'); // make sure Post model exists
 
-// Get all posts
+// GET all posts
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find().populate('author', ['name', 'email']);
+    const posts = await Post.find().sort({ createdAt: -1 });
     res.json(posts);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-// Create a post (protected)
-router.post('/', auth, async (req, res) => {
-  const { title, body } = req.body;
-
+// GET single post by ID
+router.get('/:id', async (req, res) => {
   try {
-    const newPost = new Post({ title, body, author: req.user.id });
-    const post = await newPost.save();
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
     res.json(post);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// CREATE a new post
+router.post('/', async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    const post = await Post.create({ title, content });
+    res.status(201).json(post);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
 module.exports = router;
-//test
