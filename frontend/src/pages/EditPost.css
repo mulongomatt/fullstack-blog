@@ -1,0 +1,67 @@
+.edit-post-container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.edit-post-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #111827;
+  text-align: center;
+}
+
+.edit-post-form input,
+.edit-post-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  transition: 0.2s;
+}
+
+.edit-post-form input:focus,
+.edit-post-form textarea:focus {
+  outline: none;
+  border-color: #fbbf24;
+  box-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+}
+
+.edit-post-form textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.btn {
+  display: inline-block;
+  background-color: #fbbf24;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-right: 0.5rem;
+}
+
+.btn:hover {
+  background-color: #fcd34d;
+}
+
+.btn.cancel {
+  background-color: #ef4444;
+}
+
+.btn.cancel:hover {
+  background-color: #f87171;
+}
+
+.login-warning {
+  text-align: center;
+  margin-top: 4rem;
+}

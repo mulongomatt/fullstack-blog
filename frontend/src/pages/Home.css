@@ -1,0 +1,98 @@
+.home-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.home-container h1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2rem;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+}
+
+.tab-label {
+  font-size: 1rem;
+  background-color: #fbbf24;
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.post-card {
+  background-color: #f3f4f6;
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.post-card h3 {
+  margin: 0.3rem 0;
+  color: #111827;
+}
+
+.post-card .author {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.post-card p {
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+.btn {
+  background-color: #fbbf24;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background-color: #fcd34d;
+}
+
+.login-warning {
+  text-align: center;
+  margin-top: 4rem;
+}
+.post-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.btn.edit {
+  background-color: #3b82f6;
+}
+
+.btn.edit:hover {
+  background-color: #60a5fa;
+}
+
+.btn.delete {
+  background-color: #ef4444;
+}
+
+.btn.delete:hover {
+  background-color: #f87171;
+}

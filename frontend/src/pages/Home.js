@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { getPosts } from "../api/api";
+import { Link } from "react-router-dom";
 
 const Home = ({ token }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    if (token) {
-      getPosts(token).then(setPosts);
-    }
+    const fetchPosts = async () => {
+      const data = await getPosts(token);
+      setPosts(data);
+    };
+    fetchPosts();
   }, [token]);
-
-  if (!token) return <div className="container"><h2>Please login to view posts</h2></div>;
 
   return (
     <div className="container">
-      <h1>All Posts</h1>
-      {posts.length === 0 && <p>No posts yet.</p>}
-      {posts.map((post) => (
-        <div key={post._id} className="post">
-          <h2>{post.title}</h2>
-          <p>{post.content}</p>
-        </div>
-      ))}
+      <h2 className="page-title">All Posts</h2>
+      <div className="posts-grid">
+        {posts.map((post) => (
+          <div className="post-card" key={post._id}>
+            <h3>{post.title}</h3>
+            <small>Author: {post.user?.name || "Unknown"}</small>
+            <p>{post.content.slice(0, 100)}...</p>
+            <div className="post-actions">
+              <Link to={`/posts/${post._id}`} className="btn view">View Details</Link>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

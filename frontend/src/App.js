@@ -6,13 +6,12 @@ import PostDetails from "./pages/PostDetails";
 import CreatePost from "./pages/CreatePost";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import "./styles.css";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
 
   useEffect(() => {
-    localStorage.setItem("token", token);
+    if (token) localStorage.setItem("token", token);
   }, [token]);
 
   return (
@@ -23,7 +22,7 @@ function App() {
         <Route path="/posts/:id" element={<PostDetails token={token} />} />
         <Route path="/create" element={<CreatePost token={token} />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
-        <Route path="/register" element={<Register setToken={setToken} />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
   );

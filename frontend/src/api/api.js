@@ -1,8 +1,6 @@
 const API_URL = "http://localhost:5000/api";
 
-// -------------------- User Authentication --------------------
-
-// Register a new user
+// Register user
 export const registerUser = async (name, email, password) => {
   const res = await fetch(`${API_URL}/users/register`, {
     method: "POST",
@@ -22,15 +20,15 @@ export const loginUser = async (email, password) => {
   return res.json();
 };
 
-// -------------------- Blog Posts --------------------
-
-// Get all posts (public)
-export const getPosts = async () => {
-  const res = await fetch(`${API_URL}/posts`);
+// Get all posts
+export const getPosts = async (token) => {
+  const res = await fetch(`${API_URL}/posts`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
   return res.json();
 };
 
-// Get single post by ID (requires token if your backend is protected)
+// Get post by ID
 export const getPostById = async (id, token) => {
   const res = await fetch(`${API_URL}/posts/${id}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -38,39 +36,31 @@ export const getPostById = async (id, token) => {
   return res.json();
 };
 
-// Create a new post (requires JWT)
+// Create post
 export const createPost = async (title, content, token) => {
   const res = await fetch(`${API_URL}/posts`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify({ title, content }),
   });
   return res.json();
 };
 
-// Update a post (requires JWT)
+// Update post
 export const updatePost = async (id, title, content, token) => {
   const res = await fetch(`${API_URL}/posts/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify({ title, content }),
   });
   return res.json();
 };
 
-// Delete a post (requires JWT)
+// Delete post
 export const deletePost = async (id, token) => {
   const res = await fetch(`${API_URL}/posts/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
   return res.json();
 };

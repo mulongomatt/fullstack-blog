@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ token, setToken }) => {
   const handleLogout = () => {
@@ -8,17 +9,19 @@ const Navbar = ({ token, setToken }) => {
 
   return (
     <nav className="navbar">
-      <div>Dev Blog</div>
+      <div>
+        <Link to="/">DevBlog</Link>
+      </div>
       <div>
         {token ? (
           <>
-            <a href="/create">Create Post</a>
-            <button onClick={handleLogout}>Logout</button>
+            <Link to="/create">Create Post</Link>
+            <button onClick={handleLogout} className="btn delete">Logout</button>
           </>
         ) : (
           <>
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
           </>
         )}
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { createPost } from "../api/api";
 import { useNavigate } from "react-router-dom";
+import { createPost } from "../api/api";
 
 const CreatePost = ({ token }) => {
   const [title, setTitle] = useState("");
@@ -13,26 +13,13 @@ const CreatePost = ({ token }) => {
     navigate("/");
   };
 
-  if (!token) return <div className="container"><h2>Please login to create a post</h2></div>;
-
   return (
     <div className="container">
-      <h1>Create Post</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          required
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <textarea
-          placeholder="Content"
-          value={content}
-          required
-          onChange={(e) => setContent(e.target.value)}
-        ></textarea>
-        <button type="submit">Submit</button>
+      <h2 className="page-title">Create Post</h2>
+      <form className="form" onSubmit={handleSubmit}>
+        <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+        <textarea placeholder="Content" value={content} onChange={(e) => setContent(e.target.value)} required />
+        <button type="submit" className="btn submit">Create Post</button>
       </form>
     </div>
   );

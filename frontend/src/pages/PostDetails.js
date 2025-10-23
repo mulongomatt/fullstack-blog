@@ -1,27 +1,36 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getPostById } from "../api/api";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getPostById, deletePost } from "../api/api";
 
-const PostDetails = () => {
+const PostDetails = ({ token }) => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
-      const data = await getPostById(id);
+      const data = await getPostById(id, token);
       setPost(data);
     };
     fetchPost();
-  }, [id]);
+  }, [id, token]);
 
   if (!post) return <p>Loading...</p>;
 
+  const handleDelete = async () => {
+    await deletePost(id, token);
+    navigate("/");
+  };
+
   return (
     <div className="container">
-      <h1>{post.title}</h1>
-      <h3>{post.subtitle}</h3>
+      <h2 className="page-title">{post.title}</h2>
+      <small>Author: {post.user?.name || "Unknown"}</small>
       <p>{post.content}</p>
-      <p>Author: {post.user?.name}</p>
+      <div className="post-actions">
+        <button className="btn delete" onClick={handleDelete}>Delete</button>
+        <button className="btn view" onClick={() => navigate(-1)}>Back</button>
+      </div>
     </div>
   );
 };

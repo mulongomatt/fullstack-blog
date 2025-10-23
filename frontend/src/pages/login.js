@@ -13,6 +13,7 @@ const Login = ({ setToken }) => {
     const res = await loginUser(email, password);
     if (res.token) {
       setToken(res.token);
+      localStorage.setItem("token", res.token);
       navigate("/");
     } else {
       setError(res.msg || "Login failed");
@@ -21,24 +22,12 @@ const Login = ({ setToken }) => {
 
   return (
     <div className="container">
-      <h1>Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          required
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Login</button>
+      <h2 className="page-title">Login</h2>
+      <form className="form" onSubmit={handleSubmit}>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <button type="submit" className="btn submit">Login</button>
       </form>
     </div>
   );
