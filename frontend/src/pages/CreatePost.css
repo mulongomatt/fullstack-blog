@@ -4,7 +4,7 @@
   padding: 2rem;
   background-color: #f3f4f6;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
 .create-post-container h2 {
@@ -37,33 +37,31 @@
   resize: vertical;
 }
 
-.image-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  margin-bottom: 1rem;
+.file-upload {
   border: 2px dashed #d1d5db;
   border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  position: relative;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.image-upload:hover {
-  border-color: #fbbf24;
-}
-
-.image-upload input[type="file"] {
-  display: none;
-}
-
-.post-image {
-  max-height: 300px;
+.file-upload input[type="file"] {
+  position: absolute;
+  opacity: 0;
   width: 100%;
-  object-fit: cover;
+  height: 100%;
+  left: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 300px;
   border-radius: 8px;
-  margin-bottom: 12px;
+  object-fit: cover;
 }
 
 .btn {
@@ -80,11 +78,4 @@
 
 .btn:hover {
   background-color: #fcd34d;
-}
-
-.login-warning {
-  text-align: center;
-  margin-top: 1rem;
-  color: red;
-  font-weight: bold;
 }

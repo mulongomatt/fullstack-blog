@@ -64,3 +64,18 @@ export const deletePost = async (id, token) => {
   });
   return res.json();
 };
+
+// Upload image to Cloudinary
+export const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "devblog_preset"); 
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json();
+  return data.secure_url; // return the uploaded image URL
+};

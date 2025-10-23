@@ -3,57 +3,65 @@ import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/api";
 import "./CreatePost.css";
 
-const CreatePost = ({ token }) => {
-  const navigate = useNavigate();
+function CreatePost({ token }) {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
-  const [image, setImage] = useState(null);
-  const [imagePreview, setImagePreview] = useState("");
-  const [error, setError] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const navigate = useNavigate();
 
-  const handleImageChange = (e) => {
+  // Handle file selection
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
+  // Handle drag-and-drop
   const handleDrop = (e) => {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
-    if (file) {
-      setImage(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
-  const handleDragOver = (e) => e.preventDefault();
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      let imageUrl = "";
-      if (image) {
-        const formData = new FormData();
-        formData.append("file", image);
-        formData.append("upload_preset", "ml_default");
+    let imageUrl = "";
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append("file", imageFile);
+      formData.append("upload_preset", "ml_default"); // replace with your Cloudinary preset
 
-        const res = await fetch(
-          `https://api.cloudinary.com/v1_1/dsedmnzya/image/upload`,
-          { method: "POST", body: formData }
-        );
-        const data = await res.json();
-        imageUrl = data.secure_url;
-      }
+      const cloudinaryRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await cloudinaryRes.json();
+      imageUrl = data.secure_url;
+    }
 
-      const res = await createPost(title, subtitle, content, imageUrl, token);
-      if (res.msg) setError(res.msg);
-      else navigate("/posts");
-    } catch (err) {
-      setError("Failed to create post");
+    const res = await createPost(
+      title,
+      content,
+      token,
+      subtitle,
+      imageUrl
+    );
+
+    if (res._id) {
+      navigate(`/posts/${res._id}`);
+    } else {
+      alert("Error creating post");
     }
   };
 
@@ -80,27 +88,24 @@ const CreatePost = ({ token }) => {
           onChange={(e) => setContent(e.target.value)}
           required
         />
-
         <div
-          className="image-upload"
+          className="file-upload"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
           {imagePreview ? (
-            <img src={imagePreview} alt="Preview" className="post-image" />
+            <img src={imagePreview} alt="Preview" className="image-preview" />
           ) : (
             <p>Drag & drop an image here, or click to select</p>
           )}
-          <input type="file" accept="image/*" onChange={handleImageChange} />
+          <input type="file" onChange={handleFileChange} />
         </div>
-
         <button type="submit" className="btn">
           Create Post
         </button>
-        {error && <p className="login-warning">{error}</p>}
       </form>
     </div>
   );
-};
+}
 
 export default CreatePost;

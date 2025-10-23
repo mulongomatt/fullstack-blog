@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getPostById, updatePost } from "../api/api";
-import "./CreatePost.css";
+import { useParams, useNavigate } from "react-router-dom";
+import { getPostById, updatePost, uploadImage } from "../api/api";
+import "./EditPost.css";
 
-const EditPost = ({ token }) => {
+function EditPost({ token }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -11,61 +11,53 @@ const EditPost = ({ token }) => {
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
-  const [preview, setPreview] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchPost = async () => {
-      try {
-        const data = await getPostById(id, token);
-        if (data.msg) {
-          setError(data.msg);
-        } else {
-          setTitle(data.title);
-          setSubtitle(data.subtitle || "");
-          setContent(data.content);
-          setImage(data.image || "");
-          setPreview(data.image || "");
-        }
-      } catch (err) {
-        setError("Failed to fetch post.");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+      const data = await getPostById(id, token);
+      setTitle(data.title);
+      setSubtitle(data.subtitle);
+      setContent(data.content);
+      setImage(data.image || "");
     };
     fetchPost();
   }, [id, token]);
 
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const url = await uploadImage(file);
+    setImage(url);
+    setUploading(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await updatePost(id, title, subtitle, content, image, token);
-      navigate("/posts");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to update post.");
+    if (!title || !content) return alert("Title and content are required");
+
+    const res = await updatePost(id, title, subtitle, content, image, token);
+    if (res._id) {
+      navigate(`/posts/${id}`);
+    } else {
+      alert(res.msg || "Error updating post");
     }
   };
 
-  if (loading) return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>;
-  if (error) return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
-
   return (
-    <div className="create-post-container">
+    <div className="edit-post-container">
       <h2>Edit Post</h2>
-      <form className="create-post-form" onSubmit={handleSubmit}>
+      <form className="edit-post-form" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          required
         />
         <input
           type="text"
-          placeholder="Subtitle"
+          placeholder="Subtitle (optional)"
           value={subtitle}
           onChange={(e) => setSubtitle(e.target.value)}
         />
@@ -73,44 +65,18 @@ const EditPost = ({ token }) => {
           placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          required
         />
         <div className="image-upload">
-          <label>
-            {preview ? (
-              <img src={preview} alt="Preview" className="post-image" />
-            ) : (
-              <span>Click or drag to upload an image</span>
-            )}
-            <input type="file" onChange={async (e) => {
-              const file = e.target.files[0];
-              if (!file) return;
-              const formData = new FormData();
-              formData.append("file", file);
-              formData.append("upload_preset", "ml_default"); // replace with your preset
-              try {
-                const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`, { method: "POST", body: formData });
-                const data = await res.json();
-                setImage(data.secure_url);
-                setPreview(data.secure_url);
-              } catch (err) {
-                console.error("Upload failed:", err);
-              }
-            }} />
-          </label>
+          <input type="file" onChange={handleFileChange} />
+          {uploading && <p>Uploading image...</p>}
+          {image && <img src={image} alt="Preview" className="preview-image" />}
         </div>
-        <button type="submit" className="btn">Update Post</button>
-        <button
-          type="button"
-          className="btn"
-          style={{ marginTop: "0.5rem", backgroundColor: "#ccc", color: "#000" }}
-          onClick={() => navigate("/posts")}
-        >
-          Back
+        <button className="btn" type="submit" disabled={uploading}>
+          Update Post
         </button>
       </form>
     </div>
   );
-};
+}
 
 export default EditPost;
