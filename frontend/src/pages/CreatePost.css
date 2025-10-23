@@ -37,6 +37,46 @@
   resize: vertical;
 }
 
+/* Upload container */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-label {
+  width: 100%;
+  min-height: 150px;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  text-align: center;
+  padding: 10px;
+  transition: 0.3s all;
+}
+
+.upload-label:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
+}
+
+.preview-image {
+  max-height: 150px;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Buttons */
 .btn {
   display: block;
   width: 100%;

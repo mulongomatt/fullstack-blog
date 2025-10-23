@@ -36,22 +36,22 @@ export const getPostById = async (id, token) => {
   return res.json();
 };
 
-// Create post
-export const createPost = async (title, content, token) => {
+// Create post with subtitle and optional image
+export const createPost = async (title, subtitle, content, token, image = "") => {
   const res = await fetch(`${API_URL}/posts`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ title, content }),
+    body: JSON.stringify({ title, subtitle, content, image }),
   });
   return res.json();
 };
 
 // Update post
-export const updatePost = async (id, title, content, token) => {
+export const updatePost = async (id, title, subtitle, content, token, image = "") => {
   const res = await fetch(`${API_URL}/posts/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ title, content }),
+    body: JSON.stringify({ title, subtitle, content, image }),
   });
   return res.json();
 };
@@ -64,4 +64,3 @@ export const deletePost = async (id, token) => {
   });
   return res.json();
 };
-

@@ -1,40 +1,82 @@
 .post-details-container {
   max-width: 800px;
-  margin: 3rem auto;
+  margin: 2rem auto;
   padding: 2rem;
-  background-color: #f3f4f6;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
 }
 
-.post-details-container h2 {
+.post-image {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.post-title {
   font-size: 2rem;
-  color: #111827;
+  font-weight: 700;
   margin-bottom: 0.5rem;
+  color: #111827;
 }
 
-.author {
-  font-size: 0.9rem;
+.post-subtitle {
+  font-size: 1.25rem;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.post-meta {
+  font-size: 0.875rem;
   color: #6b7280;
   margin-bottom: 1.5rem;
 }
 
-.content {
-  font-size: 1.05rem;
+.post-content {
+  font-size: 1rem;
+  color: #1f2937;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
 
+.post-actions {
+  display: flex;
+  gap: 1rem;
+}
+
 .btn {
-  background-color: #fbbf24;
-  border: none;
   padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+  border: none;
   transition: 0.3s;
 }
 
-.btn:hover {
+.btn-edit {
+  background-color: #fbbf24;
+}
+
+.btn-edit:hover {
   background-color: #fcd34d;
+}
+
+.btn-delete {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #dc2626;
+}
+
+.btn-back {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-back:hover {
+  background-color: #2563eb;
 }

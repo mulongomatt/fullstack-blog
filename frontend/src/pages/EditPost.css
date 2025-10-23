@@ -37,31 +37,57 @@
   resize: vertical;
 }
 
+/* Image upload for edit */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-label {
+  width: 100%;
+  min-height: 150px;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  text-align: center;
+  padding: 10px;
+  transition: 0.3s all;
+}
+
+.upload-label:hover {
+  border-color: #fbbf24;
+  box-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
+}
+
+.preview-image {
+  max-height: 150px;
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 .btn {
-  display: inline-block;
+  display: block;
+  width: 100%;
   background-color: #fbbf24;
   border: none;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem;
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
-  margin-right: 0.5rem;
 }
 
 .btn:hover {
   background-color: #fcd34d;
-}
-
-.btn.cancel {
-  background-color: #ef4444;
-}
-
-.btn.cancel:hover {
-  background-color: #f87171;
-}
-
-.login-warning {
-  text-align: center;
-  margin-top: 4rem;
 }

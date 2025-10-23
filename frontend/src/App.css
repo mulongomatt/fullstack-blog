@@ -178,4 +178,12 @@ body {
   .navbar a {
     margin: 0.3rem 0;
   }
+  .post-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
 }

@@ -4,95 +4,96 @@
   padding: 0 1rem;
 }
 
-.home-container h1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 2rem;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-}
-
-.tab-label {
-  font-size: 1rem;
-  background-color: #fbbf24;
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
 .posts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .post-card {
-  background-color: #f3f4f6;
-  padding: 1rem 1.2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .post-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
-.post-card h3 {
-  margin: 0.3rem 0;
+.post-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.post-content {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
   color: #111827;
 }
 
-.post-card .author {
-  font-size: 0.9rem;
-  color: #6b7280;
+.post-subtitle {
+  font-size: 1rem;
   margin-bottom: 0.5rem;
+  color: #374151;
 }
 
-.post-card p {
-  font-size: 0.95rem;
-  margin-bottom: 0.8rem;
+.post-meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.post-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
 }
 
 .btn {
-  background-color: #fbbf24;
-  border: none;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
+  border: none;
   transition: 0.3s;
 }
 
-.btn:hover {
+.btn-view {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-view:hover {
+  background-color: #2563eb;
+}
+
+.btn-edit {
+  background-color: #fbbf24;
+}
+
+.btn-edit:hover {
   background-color: #fcd34d;
 }
 
-.login-warning {
-  text-align: center;
-  margin-top: 4rem;
-}
-.post-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-}
-
-.btn.edit {
-  background-color: #3b82f6;
-}
-
-.btn.edit:hover {
-  background-color: #60a5fa;
-}
-
-.btn.delete {
+.btn-delete {
   background-color: #ef4444;
+  color: white;
 }
 
-.btn.delete:hover {
-  background-color: #f87171;
+.btn-delete:hover {
+  background-color: #dc2626;
 }
