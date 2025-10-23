@@ -48,17 +48,17 @@
 }
 
 .btn {
-  display: block;
-  width: 100%;
-  background-color: #fbbf24;
-  border: none;
-  padding: 0.8rem;
-  font-weight: bold;
+  background-color: #fbbf24; 
+  color: #111827;
   border-radius: 8px;
+  padding: 0.8rem 1.2rem;
+  text-decoration: none;
+  font-weight: 700;
+  border: none;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-.btn:hover {
+.btn:hover,
+.btn-secondary:hover {
   background-color: #fcd34d;
 }
