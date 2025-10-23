@@ -1,10 +1,27 @@
-import { Link } from "react-router-dom";
+import React from "react";
 
-const Navbar = () => {
+const Navbar = ({ token, setToken }) => {
+  const handleLogout = () => {
+    setToken("");
+    localStorage.removeItem("token");
+  };
+
   return (
-    <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
-      <Link to="/" style={{ marginRight: "1rem" }}>Home</Link>
-      <Link to="/create">Create Post</Link>
+    <nav className="navbar">
+      <div>Dev Blog</div>
+      <div>
+        {token ? (
+          <>
+            <a href="/create">Create Post</a>
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+          </>
+        )}
+      </div>
     </nav>
   );
 };

@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { getPosts } from "../api";
-import { Link } from "react-router-dom";
+import { getPosts } from "../api/api";
 
-function Home() {
+const Home = ({ token }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      const data = await getPosts();
-      setPosts(data);
-    };
-    fetchPosts();
-  }, []);
+    if (token) {
+      getPosts(token).then(setPosts);
+    }
+  }, [token]);
+
+  if (!token) return <div className="container"><h2>Please login to view posts</h2></div>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="container">
       <h1>All Posts</h1>
-      {posts.map((p) => (
-        <div
-          key={p._id}
-          style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}
-        >
-          <Link to={`/posts/${p._id}`}>
-            <h3>{p.title}</h3>
-          </Link>
-          <p>{p.content}</p>
-          <small>Created: {new Date(p.createdAt).toLocaleString()}</small>
+      {posts.length === 0 && <p>No posts yet.</p>}
+      {posts.map((post) => (
+        <div key={post._id} className="post">
+          <h2>{post.title}</h2>
+          <p>{post.content}</p>
         </div>
       ))}
     </div>
   );
-}
+};
 
 export default Home;

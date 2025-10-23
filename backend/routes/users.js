@@ -4,9 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// @route   POST /api/users/register
-// @desc    Register a new user
-// @access  Public
+// Register
 router.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
   try {
@@ -14,24 +12,17 @@ router.post('/register', async (req, res) => {
     if (user) return res.status(400).json({ msg: 'User already exists' });
 
     user = new User({ name, email, password });
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
     await user.save();
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
     res.json({ token });
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server error');
   }
 });
 
-// @route   POST /api/users/login
-// @desc    Login user and return JWT
-// @access  Public
+// Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -43,10 +34,8 @@ router.post('/login', async (req, res) => {
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
     res.json({ token });
   } catch (err) {
-    console.error(err.message);
     res.status(500).send('Server error');
   }
 });

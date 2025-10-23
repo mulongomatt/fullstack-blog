@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getPosts } from "../api"; // you could create getPostById if needed
+import { getPostById } from "../api/api";
 
-function PostDetails() {
+const PostDetails = () => {
   const { id } = useParams();
   const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchPost = async () => {
-      const allPosts = await getPosts();
-      const foundPost = allPosts.find((p) => p._id === id);
-      setPost(foundPost);
+      const data = await getPostById(id);
+      setPost(data);
     };
     fetchPost();
   }, [id]);
 
-  if (!post) return <div>Loading...</div>;
+  if (!post) return <p>Loading...</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>{post.title}</h2>
+    <div className="container">
+      <h1>{post.title}</h1>
+      <h3>{post.subtitle}</h3>
       <p>{post.content}</p>
-      <small>Created: {new Date(post.createdAt).toLocaleString()}</small>
+      <p>Author: {post.user?.name}</p>
     </div>
   );
-}
+};
 
 export default PostDetails;

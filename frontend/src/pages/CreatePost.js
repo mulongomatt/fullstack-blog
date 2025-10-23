@@ -1,42 +1,41 @@
 import React, { useState } from "react";
-import { createPost } from "../api";
+import { createPost } from "../api/api";
 import { useNavigate } from "react-router-dom";
 
-function CreatePost({ token }) {
+const CreatePost = ({ token }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!token) return alert("You must be logged in!");
-    const newPost = await createPost(title, content, token);
-    alert("Post created!");
-    setTitle("");
-    setContent("");
-    navigate("/"); // redirect to home
+    await createPost(title, content, token);
+    navigate("/");
   };
 
+  if (!token) return <div className="container"><h2>Please login to create a post</h2></div>;
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Create New Post</h2>
+    <div className="container">
+      <h1>Create Post</h1>
       <form onSubmit={handleSubmit}>
         <input
+          type="text"
           placeholder="Title"
           value={title}
+          required
           onChange={(e) => setTitle(e.target.value)}
         />
-        <br />
         <textarea
           placeholder="Content"
           value={content}
+          required
           onChange={(e) => setContent(e.target.value)}
-        />
-        <br />
-        <button type="submit">Create Post</button>
+        ></textarea>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
-}
+};
 
 export default CreatePost;

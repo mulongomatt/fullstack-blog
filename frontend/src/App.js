@@ -4,41 +4,26 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import PostDetails from "./pages/PostDetails";
 import CreatePost from "./pages/CreatePost";
-import { registerUser, loginUser } from "./api";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import "./styles.css";
 
 function App() {
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-  // Auto-register & login demo user on app load
   useEffect(() => {
-    const authDemoUser = async () => {
-      try {
-        await registerUser("Demo User", "demo@example.com", "123456");
-      } catch (err) {
-        // user might already exist, ignore
-      }
-      const loginRes = await loginUser("demo@example.com", "123456");
-      setToken(loginRes.token);
-    };
-    authDemoUser();
-  }, []);
+    localStorage.setItem("token", token);
+  }, [token]);
 
   return (
     <Router>
-      <Navbar />
+      <Navbar token={token} setToken={setToken} />
       <Routes>
-        <Route
-          path="/"
-          element={<Home token={token} />} // pass token to Home if needed
-        />
-        <Route
-          path="/posts/:id"
-          element={<PostDetails token={token} />} // pass token to PostDetails if needed
-        />
-        <Route
-          path="/create"
-          element={<CreatePost token={token} />} // pass token to CreatePost
-        />
+        <Route path="/" element={<Home token={token} />} />
+        <Route path="/posts/:id" element={<PostDetails token={token} />} />
+        <Route path="/create" element={<CreatePost token={token} />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
+        <Route path="/register" element={<Register setToken={setToken} />} />
       </Routes>
     </Router>
   );
