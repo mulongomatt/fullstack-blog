@@ -1,27 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const Post = require('../models/post');
+const Post = require('../models/Post');
 
-// Get all posts
-router.get('/', async (req, res) => {
+// Create a post (requires JWT)
+router.post('/', auth, async (req, res) => {
+  const { title, content } = req.body;
   try {
-    const posts = await Post.find().populate('author', ['name', 'email']);
-    res.json(posts);
+    const newPost = new Post({ title, content, user: req.user.id });
+    const savedPost = await newPost.save();
+    res.status(201).json(savedPost);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
 });
 
-// Create a post (protected)
-router.post('/', auth, async (req, res) => {
-  const { title, body } = req.body;
-
+// Get all posts (public)
+router.get('/', async (req, res) => {
   try {
-    const newPost = new Post({ title, body, author: req.user.id });
-    const post = await newPost.save();
-    res.json(post);
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
