@@ -1,89 +1,106 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/api";
-import "./CreatePost.css"; // import the CSS
+import "./CreatePost.css";
 
-function CreatePost({ token }) {
+const CreatePost = ({ token }) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [error, setError] = useState("");
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      setPreview(URL.createObjectURL(file));
+      setImagePreview(URL.createObjectURL(file));
     }
   };
 
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleDragOver = (e) => e.preventDefault();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !content) return alert("Title and content are required!");
-
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("subtitle", subtitle);
-    formData.append("content", content);
-    if (image) formData.append("image", image);
 
     try {
-      await createPost(formData, token);
-      navigate("/");
+      let imageUrl = "";
+      if (image) {
+        const formData = new FormData();
+        formData.append("file", image);
+        formData.append("upload_preset", "ml_default");
+
+        const res = await fetch(
+          `https://api.cloudinary.com/v1_1/dsedmnzya/image/upload`,
+          { method: "POST", body: formData }
+        );
+        const data = await res.json();
+        imageUrl = data.secure_url;
+      }
+
+      const res = await createPost(title, subtitle, content, imageUrl, token);
+      if (res.msg) setError(res.msg);
+      else navigate("/posts");
     } catch (err) {
-      console.error(err);
-      alert("Failed to create post");
+      setError("Failed to create post");
     }
   };
 
   return (
     <div className="create-post-container">
-      <h2 className="create-post-heading">Create New Post</h2>
-      <form onSubmit={handleSubmit} className="create-post-form">
+      <h2>Create New Post</h2>
+      <form className="create-post-form" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="create-post-input"
+          required
         />
         <input
           type="text"
           placeholder="Subtitle"
           value={subtitle}
           onChange={(e) => setSubtitle(e.target.value)}
-          className="create-post-input"
         />
         <textarea
           placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="create-post-textarea"
+          required
         />
-        <div className="upload-container">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="file-input"
-            id="fileUpload"
-          />
-          <label htmlFor="fileUpload" className="upload-label">
-            {preview ? (
-              <img src={preview} alt="preview" className="preview-image" />
-            ) : (
-              "Click or drag image here to upload"
-            )}
-          </label>
+
+        <div
+          className="image-upload"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+        >
+          {imagePreview ? (
+            <img src={imagePreview} alt="Preview" className="post-image" />
+          ) : (
+            <p>Drag & drop an image here, or click to select</p>
+          )}
+          <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>
-        <button type="submit" className="create-post-button">
+
+        <button type="submit" className="btn">
           Create Post
         </button>
+        {error && <p className="login-warning">{error}</p>}
       </form>
     </div>
   );
-}
+};
 
 export default CreatePost;

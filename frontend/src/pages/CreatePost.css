@@ -4,7 +4,7 @@
   padding: 2rem;
   background-color: #f3f4f6;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .create-post-container h2 {
@@ -37,46 +37,35 @@
   resize: vertical;
 }
 
-/* Upload container */
-.upload-container {
+.image-upload {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
   margin-bottom: 1rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.file-input {
+.image-upload:hover {
+  border-color: #fbbf24;
+}
+
+.image-upload input[type="file"] {
   display: none;
 }
 
-.upload-label {
+.post-image {
+  max-height: 300px;
   width: 100%;
-  min-height: 150px;
-  border: 2px dashed #d1d5db;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #6b7280;
-  text-align: center;
-  padding: 10px;
-  transition: 0.3s all;
-}
-
-.upload-label:hover {
-  border-color: #fbbf24;
-  box-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
-}
-
-.preview-image {
-  max-height: 150px;
-  max-width: 100%;
-  border-radius: 8px;
   object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
 }
 
-/* Buttons */
 .btn {
   display: block;
   width: 100%;
@@ -95,5 +84,7 @@
 
 .login-warning {
   text-align: center;
-  margin-top: 4rem;
+  margin-top: 1rem;
+  color: red;
+  font-weight: bold;
 }

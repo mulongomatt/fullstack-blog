@@ -1,115 +1,65 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getPostById, deletePost } from "../api/api";
+import "./PostDetails.css"; // import the CSS
 
-function PostDetails({ token }) {
+function PostDetails({ token, userId }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
-      const data = await getPostById(id, token);
-      setPost(data);
+      try {
+        const data = await getPostById(id, token);
+        if (data.msg) setError(data.msg);
+        else setPost(data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load post.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPost();
   }, [id, token]);
 
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this post?")) {
-      const res = await deletePost(id, token);
-      if (res.msg === "Post removed") {
-        navigate("/"); // go back to all posts
-      } else {
-        alert(res.msg || "Error deleting post");
+      try {
+        const res = await deletePost(id, token);
+        if (res.msg === "Post removed") navigate("/posts");
+        else alert(res.msg || "Error deleting post");
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting post");
       }
     }
   };
 
-  if (!post) return <p>Loading...</p>;
+  if (loading) return <p style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</p>;
+  if (error) return <p style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</p>;
 
   return (
-    <div
-      style={{
-        maxWidth: "800px",
-        margin: "40px auto",
-        padding: "20px",
-        borderRadius: "12px",
-        boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-        backgroundColor: "#fff",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      }}
-    >
-      {post.image && (
-        <div
-          style={{
-            height: "300px",
-            backgroundImage: `url(${post.image})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            borderRadius: "10px",
-            marginBottom: "20px",
-          }}
-        />
-      )}
-      <h1 style={{ fontSize: "2rem", marginBottom: "10px", color: "#4f46e5" }}>
-        {post.title}
-      </h1>
-      {post.subtitle && (
-        <h3 style={{ fontSize: "1.2rem", marginBottom: "10px", color: "#6b7280" }}>
-          {post.subtitle}
-        </h3>
-      )}
-      <p style={{ fontSize: "0.9rem", color: "#9ca3af", marginBottom: "20px" }}>
+    <div className="post-details-container">
+      {post.image && <img src={post.image} alt={post.title} className="post-image" />}
+      <h1 className="post-title">{post.title}</h1>
+      {post.subtitle && <h3 className="post-subtitle">{post.subtitle}</h3>}
+      <p className="post-meta">
         By: {post.user?.name || "Unknown"} | {new Date(post.createdAt).toLocaleDateString()}
       </p>
-      <p style={{ fontSize: "1rem", lineHeight: "1.6", marginBottom: "30px" }}>
-        {post.content}
-      </p>
+      <p className="post-content">{post.content}</p>
 
-      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-        <button
-          onClick={() => navigate(`/edit/${id}`)}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#fbbf24",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          Edit
-        </button>
-        <button
-          onClick={handleDelete}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#ef4444",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          Delete
-        </button>
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#3b82f6",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
-        >
-          Back
-        </button>
+      <div className="post-actions">
+        {post.user?._id === userId && (
+          <>
+            <button className="btn btn-edit" onClick={() => navigate(`/edit/${id}`)}>Edit</button>
+            <button className="btn btn-delete" onClick={handleDelete}>Delete</button>
+          </>
+        )}
+        <button className="btn btn-back" onClick={() => navigate("/posts")}>Back</button>
       </div>
     </div>
   );

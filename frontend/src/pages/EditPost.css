@@ -1,21 +1,21 @@
-.edit-post-container {
+.create-post-container {
   max-width: 700px;
   margin: 3rem auto;
   padding: 2rem;
   background-color: #f3f4f6;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.edit-post-container h2 {
+.create-post-container h2 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
   color: #111827;
   text-align: center;
 }
 
-.edit-post-form input,
-.edit-post-form textarea {
+.create-post-form input,
+.create-post-form textarea {
   width: 100%;
   padding: 0.8rem;
   margin-bottom: 1rem;
@@ -25,55 +25,45 @@
   transition: 0.2s;
 }
 
-.edit-post-form input:focus,
-.edit-post-form textarea:focus {
+.create-post-form input:focus,
+.create-post-form textarea:focus {
   outline: none;
   border-color: #fbbf24;
   box-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
 }
 
-.edit-post-form textarea {
+.create-post-form textarea {
   min-height: 150px;
   resize: vertical;
 }
 
-/* Image upload for edit */
-.upload-container {
+.image-upload {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: 1rem;
   margin-bottom: 1rem;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.file-input {
+.image-upload:hover {
+  border-color: #fbbf24;
+}
+
+.image-upload input[type="file"] {
   display: none;
 }
 
-.upload-label {
+.post-image {
+  max-height: 300px;
   width: 100%;
-  min-height: 150px;
-  border: 2px dashed #d1d5db;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #6b7280;
-  text-align: center;
-  padding: 10px;
-  transition: 0.3s all;
-}
-
-.upload-label:hover {
-  border-color: #fbbf24;
-  box-shadow: 0 0 5px rgba(251, 191, 36, 0.3);
-}
-
-.preview-image {
-  max-height: 150px;
-  max-width: 100%;
-  border-radius: 8px;
   object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
 }
 
 .btn {
@@ -90,4 +80,11 @@
 
 .btn:hover {
   background-color: #fcd34d;
+}
+
+.login-warning {
+  text-align: center;
+  margin-top: 1rem;
+  color: red;
+  font-weight: bold;
 }

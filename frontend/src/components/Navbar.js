@@ -8,22 +8,40 @@ const Navbar = ({ token, setToken }) => {
   const handleLogout = () => {
     setToken("");
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/welcome");
   };
 
   return (
     <nav className="navbar">
-      <div className="navbar-logo">
-        <Link to="/">DevBlog</Link>
-      </div>
-      <div className="navbar-links">
-        <Link to="/">Home</Link>
-        {token && <Link to="/posts">All Posts</Link>}
-        {token && <Link to="/create">Create Post</Link>}
-        {!token && <Link to="/login">Login</Link>}
-        {!token && <Link to="/register">Register</Link>}
+      <div className="nav-left">
+        <Link to="/welcome" className="nav-logo">
+          DevBlog
+        </Link>
+
         {token && (
-          <button className="btn-logout" onClick={handleLogout}>
+          <>
+            <Link to="/posts" className="nav-link">
+              All Posts
+            </Link>
+            <Link to="/create" className="nav-link">
+              Create Post
+            </Link>
+          </>
+        )}
+      </div>
+
+      <div className="nav-right">
+        {!token ? (
+          <>
+            <Link to="/login" className="nav-link">
+              Login
+            </Link>
+            <Link to="/register" className="nav-link">
+              Register
+            </Link>
+          </>
+        ) : (
+          <button className="nav-link btn-logout" onClick={handleLogout}>
             Logout
           </button>
         )}

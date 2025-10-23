@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getPostById, updatePost } from "../api/api";
+import "./CreatePost.css";
 
-function EditPost({ token }) {
+const EditPost = ({ token }) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -10,99 +11,106 @@ function EditPost({ token }) {
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
+  const [preview, setPreview] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
-      const post = await getPostById(id, token);
-      setTitle(post.title);
-      setSubtitle(post.subtitle || "");
-      setContent(post.content);
-      setImage(post.image || "");
+      try {
+        const data = await getPostById(id, token);
+        if (data.msg) {
+          setError(data.msg);
+        } else {
+          setTitle(data.title);
+          setSubtitle(data.subtitle || "");
+          setContent(data.content);
+          setImage(data.image || "");
+          setPreview(data.image || "");
+        }
+      } catch (err) {
+        setError("Failed to fetch post.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPost();
   }, [id, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const updatedPost = {
-      title,
-      subtitle,
-      content,
-      image,
-    };
-
-    const res = await updatePost(id, updatedPost.title, updatedPost.content, token);
-
-    if (res.msg) {
-      alert(res.msg); // show error message
-    } else {
-      navigate(`/posts/${id}`);
+    try {
+      await updatePost(id, title, subtitle, content, image, token);
+      navigate("/posts");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to update post.");
     }
   };
 
+  if (loading) return <div style={{ textAlign: "center", marginTop: "2rem" }}>Loading...</div>;
+  if (error) return <div style={{ textAlign: "center", marginTop: "2rem", color: "red" }}>{error}</div>;
+
   return (
-    <div style={{ maxWidth: "700px", margin: "0 auto", padding: "20px" }}>
+    <div className="create-post-container">
       <h2>Edit Post</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "12px" }}>
-          <label>Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            style={{ width: "100%", padding: "8px", borderRadius: "4px" }}
-          />
+      <form className="create-post-form" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Subtitle"
+          value={subtitle}
+          onChange={(e) => setSubtitle(e.target.value)}
+        />
+        <textarea
+          placeholder="Content"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
+        />
+        <div className="image-upload">
+          <label>
+            {preview ? (
+              <img src={preview} alt="Preview" className="post-image" />
+            ) : (
+              <span>Click or drag to upload an image</span>
+            )}
+            <input type="file" onChange={async (e) => {
+              const file = e.target.files[0];
+              if (!file) return;
+              const formData = new FormData();
+              formData.append("file", file);
+              formData.append("upload_preset", "ml_default"); // replace with your preset
+              try {
+                const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`, { method: "POST", body: formData });
+                const data = await res.json();
+                setImage(data.secure_url);
+                setPreview(data.secure_url);
+              } catch (err) {
+                console.error("Upload failed:", err);
+              }
+            }} />
+          </label>
         </div>
-
-        <div style={{ marginBottom: "12px" }}>
-          <label>Subtitle:</label>
-          <input
-            type="text"
-            value={subtitle}
-            onChange={(e) => setSubtitle(e.target.value)}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px" }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "12px" }}>
-          <label>Content:</label>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            rows={8}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px" }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "12px" }}>
-          <label>Image URL (optional):</label>
-          <input
-            type="text"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
-            style={{ width: "100%", padding: "8px", borderRadius: "4px" }}
-          />
-        </div>
-
+        <button type="submit" className="btn">Update Post</button>
         <button
-          type="submit"
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#4f46e5",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
+          type="button"
+          className="btn"
+          style={{ marginTop: "0.5rem", backgroundColor: "#ccc", color: "#000" }}
+          onClick={() => navigate("/posts")}
         >
-          Save Changes
+          Back
         </button>
       </form>
     </div>
   );
-}
+};
 
 export default EditPost;

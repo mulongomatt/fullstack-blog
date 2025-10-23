@@ -36,8 +36,8 @@ export const getPostById = async (id, token) => {
   return res.json();
 };
 
-// Create post with subtitle and optional image
-export const createPost = async (title, subtitle, content, token, image = "") => {
+// Create post
+export const createPost = async (title, subtitle, content, image, token) => {
   const res = await fetch(`${API_URL}/posts`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -47,7 +47,7 @@ export const createPost = async (title, subtitle, content, token, image = "") =>
 };
 
 // Update post
-export const updatePost = async (id, title, subtitle, content, token, image = "") => {
+export const updatePost = async (id, title, subtitle, content, image, token) => {
   const res = await fetch(`${API_URL}/posts/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
