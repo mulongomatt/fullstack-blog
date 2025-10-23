@@ -64,3 +64,4 @@ export const deletePost = async (id, token) => {
   });
   return res.json();
 };
+
